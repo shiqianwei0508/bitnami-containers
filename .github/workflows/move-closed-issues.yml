@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Move closed issues'
 on:
   issues:
@@ -6,14 +9,13 @@ on:
   pull_request_target:
     types:
       - closed
+permissions:
+  issues: write
+  pull-requests: write
+# Avoid concurrency over the same issue
+concurrency:
+  group: card-movement-${{ github.event.issue != null && github.event.issue.number || github.event.number }}
 jobs:
-  send_to_solved:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send to the Solved column
-        uses: peter-evans/create-or-update-project-card@v2
-        with:
-          project-name: Support
-          column-name: 'Solved'
-          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
-          issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  call-move-closed-workflow:
+    uses: bitnami/support/.github/workflows/item-closed.yml@main
+    secrets: inherit

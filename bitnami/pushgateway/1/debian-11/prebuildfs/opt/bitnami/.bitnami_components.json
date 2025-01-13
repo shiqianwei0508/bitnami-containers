@@ -1,9 +1,0 @@
-{
-    "pushgateway": {
-        "arch": "amd64",
-        "digest": "39bf74584702845dabf96f12e6c49f8482030e8bf4ec2f887939b8256db1a85c",
-        "distro": "debian-11",
-        "type": "NAMI",
-        "version": "1.4.3-155"
-    }
-}

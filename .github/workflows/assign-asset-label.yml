@@ -1,24 +1,29 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Assign asset label'
 on:
   pull_request_target:
     types:
       - opened
-permissions:
-  pull-requests: write
-  issues: write
+# Remove all permissions by default
+permissions: {}
 jobs:
   assign-label:
     name: Assign label
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - id: get-asset
         name: Get modified assets
+        env:
+          DIFF_URL: "${{github.event.pull_request.diff_url}}"
+          TEMP_FILE: "${{runner.temp}}/pr-${{github.event.number}}.diff"
         run: |
-          # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
-          # and jitterbit/get-changed-files does not support pull_request_target
-          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
-          files_changed_data=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "$URL")
-          files_changed="$(echo $files_changed_data | jq -r '.[] | .filename')"
+          # This request doesn't consume API calls.
+          curl -Lkso $TEMP_FILE $DIFF_URL
+          files_changed="$(sed -nr 's/[\-\+]{3} [ab]\/(.*)/\1/p' $TEMP_FILE | sort | uniq)"
           # Adding || true to avoid "Process exited with code 1" errors
           assets=($(echo "$files_changed" | xargs dirname | sed -nr "s|bitnami/([^/]*).*|\1|p" | sort | uniq || true))
 
@@ -28,11 +33,11 @@ jobs:
             echo "name=NONE" >> $GITHUB_OUTPUT
           else
             echo "result=ok" >> $GITHUB_OUTPUT
-            echo "message=Adding label '${assets}'"  >> $GITHUB_OUTPUT
+            echo "message=Adding label '${assets}'" >> $GITHUB_OUTPUT
             echo "name=${assets}" >> $GITHUB_OUTPUT
           fi
       - name: Show messages
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
             if ("${{ steps.get-asset.outputs.result }}" != "ok" ) {
@@ -42,6 +47,6 @@ jobs:
             }
       - name: Labeling
         if: ${{ steps.get-asset.outputs.result == 'ok' }}
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@d3ef0aadb212cd1656bd6d5ce1e772787bf1682b
         with:
           add-labels: "${{ steps.get-asset.outputs.name }}"

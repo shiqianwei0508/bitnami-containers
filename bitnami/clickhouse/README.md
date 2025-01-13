@@ -1,24 +1,16 @@
-# ClickHouse packaged by Bitnami
+# Bitnami package for ClickHouse
 
 ## What is ClickHouse?
 
 > ClickHouse is an open-source column-oriented OLAP database management system. Use it to boost your database performance while providing linear scalability and hardware efficiency.
 
 [Overview of ClickHouse](https://clickhouse.com/)
-
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-$ docker run --name clickhouse bitnami/clickhouse:latest
-```
-
-### Docker Compose
-
-```console
-$ curl -sSL https://raw.githubusercontent.com/bitnami/containers/main/bitnami/clickhouse/docker-compose.yml > docker-compose.yml
-$ docker-compose up -d
+docker run --name clickhouse bitnami/clickhouse:latest
 ```
 
 ## Why use Bitnami Images?
@@ -26,9 +18,11 @@ $ docker-compose up -d
 * Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
 * With Bitnami images the latest bug fixes and features are available as soon as possible.
 * Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [minideb](https://github.com/bitnami/minideb) a minimalist Debian based container image which gives you a small base container image and the familiarity of a leading Linux distribution.
-* All Bitnami images available in Docker Hub are signed with [Docker Content Trust (DCT)](https://docs.docker.com/engine/security/trust/content_trust/). You can use `DOCKER_CONTENT_TRUST=1` to verify the integrity of the images.
+* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
+* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
 * Bitnami container images are released on a regular basis with the latest distribution packages available.
+
+Looking to use ClickHouse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## How to deploy ClickHouse in Kubernetes?
 
@@ -36,9 +30,15 @@ Deploying Bitnami applications as Helm Charts is the easiest way to get started 
 
 Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+## Only latest stable branch maintained in the free Bitnami catalog
+
+Starting December 10th 2024, only the latest stable branch of any container will receive updates in the free Bitnami catalog. To access up-to-date releases for all upstream-supported branches, consider upgrading to Bitnami Premium. Previous versions already released will not be deleted. They are still available to pull from DockerHub.
+
+Please check the Bitnami Premium page in our partner [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=GitHub&utm_medium=containers) for more information.
+
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers/).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -49,21 +49,21 @@ Subscribe to project updates by watching the [bitnami/containers GitHub repo](ht
 The recommended way to get the Bitnami ClickHouse Docker Image is to pull the prebuilt image from the [Docker Hub Registry](https://hub.docker.com/r/bitnami/clickhouse).
 
 ```console
-$ docker pull bitnami/clickhouse:latest
+docker pull bitnami/clickhouse:latest
 ```
 
 To use a specific version, you can pull a versioned tag. You can view the [list of available versions](https://hub.docker.com/r/bitnami/clickhouse/tags/) in the Docker Hub Registry.
 
 ```console
-$ docker pull bitnami/clickhouse:[TAG]
+docker pull bitnami/clickhouse:[TAG]
 ```
 
 If you wish, you can also build the image yourself by cloning the repository, changing to the directory containing the Dockerfile and executing the `docker build` command. Remember to replace the `APP`, `VERSION` and `OPERATING-SYSTEM` path placeholders in the example command below with the correct values.
 
 ```console
-$ git clone https://github.com/bitnami/containers.git
-$ cd bitnami/APP/VERSION/OPERATING-SYSTEM
-$ docker build -t bitnami/APP:latest .
+git clone https://github.com/bitnami/containers.git
+cd bitnami/APP/VERSION/OPERATING-SYSTEM
+docker build -t bitnami/APP:latest .
 ```
 
 ## Persisting your application
@@ -73,7 +73,7 @@ If you remove the container all your data will be lost, and the next time you ru
 For persistence you should mount a directory at the `/bitnami/clickhouse` path. If the mounted directory is empty, it will be initialized on the first run.
 
 ```console
-$ docker run \
+docker run \
     --volume /path/to/clickhouse-persistence:/bitnami/clickhouse \
     --env ALLOM_EMPTY_PASSWORD=false \
     bitnami/clickhouse:latest
@@ -102,7 +102,7 @@ In this example, we will create a ClickHouse client instance that will connect t
 #### Step 1: Create a network
 
 ```console
-$ docker network create my-network --driver bridge
+docker network create my-network --driver bridge
 ```
 
 #### Step 2: Launch the ClickHouse container within your network
@@ -110,7 +110,7 @@ $ docker network create my-network --driver bridge
 Use the `--network <NETWORK>` argument to the `docker run` command to attach the container to the `my-network` network.
 
 ```console
-$ docker run -d --name clickhouse-server \
+docker run -d --name clickhouse-server \
   --network my-network \
   --env ALLOW_EMPTY_PASSWORD=yes \
   bitnami/clickhouse:latest
@@ -121,12 +121,12 @@ $ docker run -d --name clickhouse-server \
 Finally we create a new container instance to launch the ClickHouse client and connect to the server created in the previous step:
 
 ```console
-$ docker run -it --rm \
+docker run -it --rm \
     --network my-network \
     bitnami/clickhouse:latest clickhouse-client --host clickhouse-server
 ```
 
-### Using Docker Compose
+### Using a Docker Compose file
 
 When not specified, Docker Compose automatically sets up a new network and attaches all deployed services to that network. However, we will explicitly define a new `bridge` network named `my-network`. In this example we assume that you want to connect to the ClickHouse server from your own custom application image which is identified in the following snippet by the service name `myapp`.
 
@@ -158,7 +158,7 @@ services:
 Launch the containers using:
 
 ```console
-$ docker-compose up -d
+docker-compose up -d
 ```
 
 ## Configuration
@@ -167,11 +167,11 @@ ClickHouse can be configured via environment variables or using a configuration 
 
 ### Configuration overrides
 
-The configuration can easily be setup by mounting your own configuration overrides on the directory `/bitnami/clickhouse/conf/conf.d` or `/bitnami/clickhouse/conf/users.d`:
+The configuration can easily be setup by mounting your own configuration overrides on the directory `/bitnami/clickhouse/etc/conf.d` or `/bitnami/clickhouse/etc/users.d`:
 
 ```console
-$ docker run --name clickhouse \
-    --volume /path/to/override.xml:/bitnami/clickhouse/conf/conf.d/override.xml:ro \
+docker run --name clickhouse \
+    --volume /path/to/override.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro \
     bitnami/clickhouse:latest
 ```
 
@@ -184,7 +184,7 @@ services:
   clickhouse:
     image: bitnami/clickhouse:latest
     volumes:
-      - /path/to/override.xml:/bitnami/clickhouse/conf/override.xml:ro
+      - /path/to/override.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro
 ```
 
 Check the [official ClickHouse configuration documentation](https://clickhouse.com/docs/en/operations/configuration-files/) for all the possible overrides and settings.
@@ -195,17 +195,49 @@ When the container is executed for the first time, it will execute the files wit
 
 In order to have your custom files inside the docker image you can mount them as a volume.
 
+> NOTE: If you use JSON format for clickhouse logs and remove the message field of the logs, the application will fail to start if there are init or start scripts in any of those 2 folders.
+
+### Environment variables
+
+#### Customizable environment variables
+
+| Name                               | Description                   | Default Value |
+|------------------------------------|-------------------------------|---------------|
+| `ALLOW_EMPTY_PASSWORD`             | Allow an empty password.      | `no`          |
+| `CLICKHOUSE_ADMIN_USER`            | ClickHouse admin username.    | `default`     |
+| `CLICKHOUSE_ADMIN_PASSWORD`        | ClickHouse admin password.    | `nil`         |
+| `CLICKHOUSE_HTTP_PORT`             | ClickHouse HTTP port.         | `8123`        |
+| `CLICKHOUSE_TCP_PORT`              | ClickHouse TCP port.          | `9000`        |
+| `CLICKHOUSE_MYSQL_PORT`            | ClickHouse MySQL port.        | `9004`        |
+| `CLICKHOUSE_POSTGRESQL_PORT`       | ClickHouse PostgreSQL port.   | `9005`        |
+| `CLICKHOUSE_INTERSERVER_HTTP_PORT` | ClickHouse Inter-server port. | `9009`        |
+
+#### Read-only environment variables
+
+| Name                          | Description                         | Value                                        |
+|-------------------------------|-------------------------------------|----------------------------------------------|
+| `CLICKHOUSE_BASE_DIR`         | ClickHouse installation directory.  | `${BITNAMI_ROOT_DIR}/clickhouse`             |
+| `CLICKHOUSE_VOLUME_DIR`       | ClickHouse volume directory.        | `/bitnami/clickhouse`                        |
+| `CLICKHOUSE_CONF_DIR`         | ClickHouse configuration directory. | `${CLICKHOUSE_BASE_DIR}/etc`                 |
+| `CLICKHOUSE_DEFAULT_CONF_DIR` | ClickHouse configuration directory. | `${CLICKHOUSE_BASE_DIR}/etc.default`         |
+| `CLICKHOUSE_MOUNTED_CONF_DIR` | ClickHouse configuration directory. | `${CLICKHOUSE_VOLUME_DIR}/etc`               |
+| `CLICKHOUSE_DATA_DIR`         | ClickHouse data directory.          | `${CLICKHOUSE_VOLUME_DIR}/data`              |
+| `CLICKHOUSE_LOG_DIR`          | ClickHouse logs directory.          | `${CLICKHOUSE_BASE_DIR}/logs`                |
+| `CLICKHOUSE_CONF_FILE`        | ClickHouse log file.                | `${CLICKHOUSE_CONF_DIR}/config.xml`          |
+| `CLICKHOUSE_LOG_FILE`         | ClickHouse log file.                | `${CLICKHOUSE_LOG_DIR}/clickhouse.log`       |
+| `CLICKHOUSE_ERROR_LOG_FILE`   | ClickHouse log file.                | `${CLICKHOUSE_LOG_DIR}/clickhouse_error.log` |
+| `CLICKHOUSE_TMP_DIR`          | ClickHouse temporary directory.     | `${CLICKHOUSE_BASE_DIR}/tmp`                 |
+| `CLICKHOUSE_PID_FILE`         | ClickHouse PID file.                | `${CLICKHOUSE_TMP_DIR}/clickhouse.pid`       |
+| `CLICKHOUSE_INITSCRIPTS_DIR`  | ClickHouse init scripts directory.  | `/docker-entrypoint-initdb.d`                |
+| `CLICKHOUSE_DAEMON_USER`      | ClickHouse daemon system user.      | `clickhouse`                                 |
+| `CLICKHOUSE_DAEMON_GROUP`     | ClickHouse daemon system group.     | `clickhouse`                                 |
+
 ### Setting the admin password on first run
-
-The admin user and password can easily be setup with the Bitnami ClickHouse Docker image using the following environment variables:
-
- - `CLICKHOUSE_ADMIN_USER`: The database admin user. Defaults to `default`.
- - `CLICKHOUSE_ADMIN_PASSWORD`: The database admin user password. No defaults.
 
 Passing the `CLICKHOUSE_ADMIN_PASSWORD` environment variable when running the image for the first time will set the password of the `CLICKHOUSE_ADMIN_USER` user to the value of `CLICKHOUSE_ADMIN_PASSWORD`.
 
 ```console
-$ docker run --name clickhouse -e CLICKHOUSE_ADMIN_PASSWORD=password123 bitnami/clickhouse:latest
+docker run --name clickhouse -e CLICKHOUSE_ADMIN_PASSWORD=password123 bitnami/clickhouse:latest
 ```
 
 or by modifying the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/clickhouse/docker-compose.yml) file present in this repository:
@@ -219,22 +251,12 @@ services:
   ...
 ```
 
-### Changing the default ports
-
-ClickHouse default ports can be changed using the following environment variables:
-
-- `CLICKHOUSE_HTTP_PORT`: HTTP port. Defaults to `8123`.
-- `CLICKHOUSE_TCP_PORT`: TCP port. Defaults to `9000`.
-- `CLICKHOUSE_MYSQL_PORT`: MySQL port. Defaults to `9004`.
-- `CLICKHOUSE_POSTGRESQL_PORT`: PostgreSQL port. Defaults to `9005`.
-- `CLICKHOUSE_INTERSERVER_HTTP_PORT`: Inter-server HTTP port. Defaults to `9009`.
-
 ### Allowing empty passwords
 
 By default the ClickHouse image expects all the available passwords to be set. In order to allow empty passwords, it is necessary to set the `ALLOW_EMPTY_PASSWORD=yes` env variable. This env variable is only recommended for testing or development purposes. We strongly recommend specifying the `CLICKHOUSE_ADMIN_PASSWORD` for any other scenario.
 
 ```console
-$ docker run --name clickhouse --env ALLOW_EMPTY_PASSWORD=yes bitnami/clickhouse:latest
+docker run --name clickhouse --env ALLOW_EMPTY_PASSWORD=yes bitnami/clickhouse:latest
 ```
 
 or by modifying the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/clickhouse/docker-compose.yml) file present in this repository:
@@ -253,7 +275,7 @@ services:
 The Bitnami ClickHouse Docker image sends the container logs to `stdout`. To view the logs:
 
 ```console
-$ docker logs clickhouse
+docker logs clickhouse
 ```
 
 You can configure the containers [logging driver](https://docs.docker.com/engine/admin/logging/overview/) using the `--log-driver` option if you wish to consume the container logs differently. In the default configuration docker uses the `json-file` driver.
@@ -267,7 +289,7 @@ Bitnami provides up-to-date versions of ClickHouse, including security patches, 
 #### Step 1: Get the updated image
 
 ```console
-$ docker pull bitnami/clickhouse:latest
+docker pull bitnami/clickhouse:latest
 ```
 
 or if you're using Docker Compose, update the value of the image property to `bitnami/clickhouse:latest`.
@@ -277,31 +299,31 @@ or if you're using Docker Compose, update the value of the image property to `bi
 Stop the currently running container using the command
 
 ```console
-$ docker stop clickhouse
+docker stop clickhouse
 ```
 
 or using Docker Compose:
 
 ```console
-$ docker-compose stop clickhouse
+docker-compose stop clickhouse
 ```
 
 Next, take a snapshot of the persistent volume `/path/to/clickhouse-persistence` using:
 
 ```console
-$ rsync -a /path/to/clickhouse-persistence /path/to/clickhouse-persistence.bkp.$(date +%Y%m%d-%H.%M.%S)
+rsync -a /path/to/clickhouse-persistence /path/to/clickhouse-persistence.bkp.$(date +%Y%m%d-%H.%M.%S)
 ```
 
 #### Step 3: Remove the currently running container
 
 ```console
-$ docker rm -v clickhouse
+docker rm -v clickhouse
 ```
 
 or using Docker Compose:
 
 ```console
-$ docker-compose rm -v clickhouse
+docker-compose rm -v clickhouse
 ```
 
 #### Step 4: Run the new image
@@ -309,14 +331,20 @@ $ docker-compose rm -v clickhouse
 Re-create your container from the new image.
 
 ```console
-$ docker run --name clickhouse bitnami/clickhouse:latest
+docker run --name clickhouse bitnami/clickhouse:latest
 ```
 
 or using Docker Compose:
 
 ```console
-$ docker-compose up clickhouse
+docker-compose up clickhouse
 ```
+
+## Using `docker-compose.yaml`
+
+Please be aware this file has not undergone internal testing. Consequently, we advise its use exclusively for development or testing purposes. For production-ready deployments, we highly recommend utilizing its associated [Bitnami Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/clickhouse).
+
+If you detect any issue in the `docker-compose.yaml` file, feel free to report it or contribute with a fix by following our [Contributing Guidelines](https://github.com/bitnami/containers/blob/main/CONTRIBUTING.md).
 
 ## Contributing
 
@@ -328,13 +356,13 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

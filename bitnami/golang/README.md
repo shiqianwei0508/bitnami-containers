@@ -1,24 +1,16 @@
-# Golang packaged by Bitnami
+# Bitnami package for Golang
 
 ## What is Golang?
 
 > Go is an object oriented programming language with sensible primitives, static typing and reflection. It also supports packages for efficient management of dependencies.
 
 [Overview of Golang](https://golang.org/)
-
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-$ docker run --name golang bitnami/golang:latest
-```
-
-### Docker Compose
-
-```console
-$ curl -sSL https://raw.githubusercontent.com/bitnami/containers/main/bitnami/golang/docker-compose.yml > docker-compose.yml
-$ docker-compose up -d
+docker run --name golang bitnami/golang:latest
 ```
 
 ## Why use Bitnami Images?
@@ -26,13 +18,21 @@ $ docker-compose up -d
 * Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
 * With Bitnami images the latest bug fixes and features are available as soon as possible.
 * Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [minideb](https://github.com/bitnami/minideb) a minimalist Debian based container image which gives you a small base container image and the familiarity of a leading Linux distribution.
-* All Bitnami images available in Docker Hub are signed with [Docker Content Trust (DCT)](https://docs.docker.com/engine/security/trust/content_trust/). You can use `DOCKER_CONTENT_TRUST=1` to verify the integrity of the images.
+* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
+* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
 * Bitnami container images are released on a regular basis with the latest distribution packages available.
+
+Looking to use Golang in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+
+## Only latest stable branch maintained in the free Bitnami catalog
+
+Starting December 10th 2024, only the latest stable branch of any container will receive updates in the free Bitnami catalog. To access up-to-date releases for all upstream-supported branches, consider upgrading to Bitnami Premium. Previous versions already released will not be deleted. They are still available to pull from DockerHub.
+
+Please check the Bitnami Premium page in our partner [Arrow Electronics](https://www.arrow.com/globalecs/na/vendors/bitnami?utm_source=GitHub&utm_medium=containers) for more information.
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers/).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -43,21 +43,21 @@ Subscribe to project updates by watching the [bitnami/containers GitHub repo](ht
 The recommended way to get the Bitnami Golang Docker Image is to pull the prebuilt image from the [Docker Hub Registry](https://hub.docker.com/r/bitnami/golang).
 
 ```console
-$ docker pull bitnami/golang:latest
+docker pull bitnami/golang:latest
 ```
 
 To use a specific version, you can pull a versioned tag. You can view the [list of available versions](https://hub.docker.com/r/bitnami/golang/tags/) in the Docker Hub Registry.
 
 ```console
-$ docker pull bitnami/golang:[TAG]
+docker pull bitnami/golang:[TAG]
 ```
 
 If you wish, you can also build the image yourself by cloning the repository, changing to the directory containing the Dockerfile and executing the `docker build` command. Remember to replace the `APP`, `VERSION` and `OPERATING-SYSTEM` path placeholders in the example command below with the correct values.
 
 ```console
-$ git clone https://github.com/bitnami/containers.git
-$ cd bitnami/APP/VERSION/OPERATING-SYSTEM
-$ docker build -t bitnami/APP:latest .
+git clone https://github.com/bitnami/containers.git
+cd bitnami/APP/VERSION/OPERATING-SYSTEM
+docker build -t bitnami/APP:latest .
 ```
 
 ## Persisting your application
@@ -65,7 +65,7 @@ $ docker build -t bitnami/APP:latest .
 For persistence you should mount a directory at the `/bitnami` path. If the mounted directory is empty, it will be initialized on the first run.
 
 ```console
-$ docker run \
+docker run \
     -v /path/to/golang-persistence:/bitnami \
     bitnami/golang:latest
 ```
@@ -91,7 +91,7 @@ Containers attached to the same network can communicate with each other using th
 #### Step 1: Create a network
 
 ```console
-$ docker network create golang-network --driver bridge
+docker network create golang-network --driver bridge
 ```
 
 #### Step 2: Launch the Golang container within your network
@@ -99,7 +99,7 @@ $ docker network create golang-network --driver bridge
 Use the `--network <NETWORK>` argument to the `docker run` command to attach the container to the `golang-network` network.
 
 ```console
-$ docker run --name golang-node1 --network golang-network bitnami/golang:latest
+docker run --name golang-node1 --network golang-network bitnami/golang:latest
 ```
 
 #### Step 3: Run another containers
@@ -124,7 +124,7 @@ $ docker -it --name golang run \
 The Bitnami Golang Docker image sends the container logs to `stdout`. To view the logs:
 
 ```console
-$ docker logs golang
+docker logs golang
 ```
 
 You can configure the containers [logging driver](https://docs.docker.com/engine/admin/logging/overview/) using the `--log-driver` option if you wish to consume the container logs differently. In the default configuration docker uses the `json-file` driver.
@@ -138,7 +138,7 @@ Bitnami provides up-to-date versions of Golang, including security patches, soon
 #### Step 1: Get the updated image
 
 ```console
-$ docker pull bitnami/golang:latest
+docker pull bitnami/golang:latest
 ```
 
 #### Step 2: Stop the running container
@@ -146,13 +146,13 @@ $ docker pull bitnami/golang:latest
 Stop the currently running container using the command
 
 ```console
-$ docker stop golang
+docker stop golang
 ```
 
 #### Step 3: Remove the currently running container
 
 ```console
-$ docker rm -v golang
+docker rm -v golang
 ```
 
 #### Step 4: Run the new image
@@ -160,8 +160,14 @@ $ docker rm -v golang
 Re-create your container from the new image.
 
 ```console
-$ docker run --name golang bitnami/golang:latest
+docker run --name golang bitnami/golang:latest
 ```
+
+## Using `docker-compose.yaml`
+
+Please be aware this file has not undergone internal testing. Consequently, we advise its use exclusively for development or testing purposes.
+
+If you detect any issue in the `docker-compose.yaml` file, feel free to report it or contribute with a fix by following our [Contributing Guidelines](https://github.com/bitnami/containers/blob/main/CONTRIBUTING.md).
 
 ## Contributing
 
@@ -173,13 +179,13 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
